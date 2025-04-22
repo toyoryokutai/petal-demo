@@ -11,82 +11,10 @@
             text-align: center;
           	cursor: url(http://hkdunivgym.web.fc2.com/image/bud.cur), text;
         }
-
-        .nav-container {
-            display: flex;
-            justify-content: center;
-            background-color: #ffffff;
-            border: 1px solid #000000;
-            width: 880px;
-          	height: 44px;
-            margin: 0 auto;
-        }
-        nav {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: space-between;
-            width: 100%;
-            position: relative;
-        }
-        .menu {
-            display: flex;
-            width: 100%;
-        }
-        .menu a {
-            flex: 1;
-            text-align: center;
-            background-color: #ccccff;
-            line-height: 44px;
-            border: 1px solid #000000;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-        .menu-toggle {
-            display: none;
-            cursor: pointer;
-            padding: 10px;
-            background-color: #ccccff;
-            border: 1px solid #000000;
-            position: absolute;
-            left: 0;  /* 変更点: 左上に配置 */
-            top: 0;
-        }
-        .menu-toggle div {
-            width: 30px;
-            height: 3px;
-            background-color: #000;
-            margin: 6px 0;
-        }
         @media screen and (max-width: 768px) {
-            .header{
-          	display: flex;
-            flex-direction:row-reverse
-        	}
-          	.menu {
-                display: none;
-                flex-direction: column;
-                width: 100%;
-                background-color: #ffffff;
-                border: none;
-            }
-            .menu a {
-              	background-color: #ffffff;
-                border: 1px solid #000000;
-            }
-            .menu-toggle {
-                display: block;
-            }
-            .menu.show {
-                display: flex;
-            }
+            
         }
     </style>
-    <script>
-        function toggleMenu() {
-            document.getElementById('menu').classList.toggle('show');
-        }
-  </script>
 
 </head>
 <body>
@@ -130,29 +58,6 @@
       }, 30);
     }
     </script>
-    <div class="header">
-        <div>
-          <h1 style="text-align: center; background-color: #f8f9fa;"><span style="color: #330066;"><span style="font-size: xx-large;"><span style="font-family: 'ＭＳ Ｐゴシック';"><img width="76" height="115" alt="" src="http://hkdunivgym.web.fc2.com/turiwa.jpg" />北海道大学体操部<img width="213" height="305" style="width: 90px; height: 106px;" alt="" src="http://hkdunivgym.web.fc2.com/heikindai.jpg" /></span></span></span></h1>
-        </div>
-        <div class="nav-container">
-              <nav>
-                  <div class="menu-toggle" onclick="toggleMenu()">
-                      <div></div>
-                      <div></div>
-                      <div></div>
-                  </div>
-                  <div class="menu" id="menu">
-                      <a href="http://hkdunivgym.web.fc2.com/about.html">体操部とは</a>
-                      <a href="http://hkdunivgym.web.fc2.com/member/membertop2.html">部員紹介</a>
-                      <a href="http://hkdunivgym.web.fc2.com/schedule.html">練習日程</a>
-                      <a href="http://hkdunivgym.web.fc2.com/result/result.html">試合結果</a>
-                      <a href="http://hkdunivgymnas.blog.fc2.com/">部員日誌</a>
-                      <a href="http://hkdunivgym.web.fc2.com/photo.html">写真</a>
-                      <a href="http://hkdunivgym.web.fc2.com/link.html">リンク</a>
-                  </div>
-              </nav>
-          </div>
-  	</div>
   	<p>
       aaaaaaaaaaaaaaaaaaaあすぶあいうふいかｄｓびｄｓぼういあびあう
   </p>
