@@ -10,11 +10,19 @@
             font-family: Arial, sans-serif;
             text-align: center;
         }
-        canvas { background: #f0f0f0; display: block; margin: 20px auto; }
-        button { display: block; margin: 10px auto; padding: 10px 20px; font-size: 16px; }
-        @media screen and (max-width: 768px) {
-            
-        }
+        canvas {
+      background: #f0f0f0;
+      display: block;
+      margin: 20px auto;
+      max-width: 90vw;
+      height: auto;
+    }
+    button {
+      display: block;
+      margin: 10px auto;
+      padding: 10px 20px;
+      font-size: 16px;
+    }
     </style>
 
 </head>
@@ -59,9 +67,10 @@
       }, 30);
     }
     </script>
-    <canvas id="roulette" width="300%" height="300%"></canvas>
+    <canvas id="roulette"></canvas>
   <button id="startButton" onclick="startRoulette()">スタート</button>
-    <script>
+
+  <script>
     const names = ["山田", "佐藤", "鈴木", "田中", "高橋", "伊藤", "渡辺"];
     const topics = [
       "好きな食べ物", "おすすめの本", "最近のマイブーム", "理想の休日",
@@ -70,13 +79,19 @@
     ];
     const canvas = document.getElementById('roulette');
     const ctx = canvas.getContext('2d');
-    const center = 200;
-
+    let center = 200; // 後で更新
     let innerAngle = 0;
     let outerAngle = 0;
 
+    function resizeCanvas() {
+      const size = Math.min(window.innerWidth * 0.9, 400);
+      canvas.width = size;
+      canvas.height = size;
+      center = size / 2;
+    }
+
     function drawRoulette(innerRot = 0, outerRot = 0) {
-      ctx.clearRect(0, 0, 400, 400);
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
       const nameAnglePer = 2 * Math.PI / names.length;
       const topicAnglePer = 2 * Math.PI / topics.length;
 
@@ -84,15 +99,15 @@
       for (let i = 0; i < topics.length; i++) {
         ctx.beginPath();
         ctx.moveTo(center, center);
-        ctx.arc(center, center, 180, outerRot + i * topicAnglePer, outerRot + (i + 1) * topicAnglePer);
+        ctx.arc(center, center, center * 0.9, outerRot + i * topicAnglePer, outerRot + (i + 1) * topicAnglePer);
         ctx.fillStyle = `hsl(${i * (360 / topics.length)}, 70%, 80%)`;
         ctx.fill();
         ctx.save();
         ctx.translate(center, center);
         ctx.rotate(outerRot + (i + 0.5) * topicAnglePer);
         ctx.fillStyle = '#000';
-        ctx.font = '12px sans-serif';
-        ctx.fillText(topics[i], 100, 0);
+        ctx.font = `${center * 0.08}px sans-serif`;
+        ctx.fillText(topics[i], center * 0.5, 0);
         ctx.restore();
       }
 
@@ -100,22 +115,22 @@
       for (let i = 0; i < names.length; i++) {
         ctx.beginPath();
         ctx.moveTo(center, center);
-        ctx.arc(center, center, 100, innerRot + i * nameAnglePer, innerRot + (i + 1) * nameAnglePer);
+        ctx.arc(center, center, center * 0.5, innerRot + i * nameAnglePer, innerRot + (i + 1) * nameAnglePer);
         ctx.fillStyle = `hsl(${(i * 360 / names.length + 180) % 360}, 60%, 85%)`;
         ctx.fill();
         ctx.save();
         ctx.translate(center, center);
         ctx.rotate(innerRot + (i + 0.5) * nameAnglePer);
         ctx.fillStyle = '#000';
-        ctx.font = '14px sans-serif';
-        ctx.fillText(names[i], 50, 0);
+        ctx.font = `${center * 0.1}px sans-serif`;
+        ctx.fillText(names[i], center * 0.3, 0);
         ctx.restore();
       }
 
       // 針
       ctx.beginPath();
       ctx.moveTo(center, center);
-      ctx.lineTo(center, 10);
+      ctx.lineTo(center, center * 0.05);
       ctx.strokeStyle = 'red';
       ctx.lineWidth = 3;
       ctx.stroke();
@@ -152,6 +167,12 @@
       }, 30);
     }
 
+    window.addEventListener('resize', () => {
+      resizeCanvas();
+      drawRoulette(innerAngle, outerAngle);
+    });
+
+    resizeCanvas();
     drawRoulette();
   </script>
 <p style="cursor: url(http://hkdunivgym.web.fc2.com/image/bud.cur), text;">
