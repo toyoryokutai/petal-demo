@@ -67,19 +67,19 @@
       }, 30);
     }
     </script>
-    <canvas id="roulette"></canvas>
+<canvas id="roulette"></canvas>
   <button id="startButton" onclick="startRoulette()">スタート</button>
 
   <script>
-    const names = ["山田", "佐藤", "鈴木", "田中", "高橋", "伊藤", "渡辺"];
+    const names = ["さとるさん", "もとゆきさん", "みおりさん", "ゆきなさん", "はるきさん", "みれい", "このかさん"];
     const topics = [
       "好きな食べ物", "おすすめの本", "最近のマイブーム", "理想の休日",
-      "好きな映画", "尊敬する人", "最近笑ったこと", "行ってみたい国",
-      "今年の目標", "部活の思い出"
+      "好きな映画とその理由", "尊敬する人について", "最近笑ったエピソード", "行ってみたい国と理由",
+      "今年の目標や抱負", "部活の思い出と一言"
     ];
     const canvas = document.getElementById('roulette');
     const ctx = canvas.getContext('2d');
-    let center = 200; // 後で更新
+    let center = 200;
     let innerAngle = 0;
     let outerAngle = 0;
 
@@ -88,6 +88,23 @@
       canvas.width = size;
       canvas.height = size;
       center = size / 2;
+    }
+
+    function drawMultilineText(text, x, y, maxWidth, lineHeight) {
+      const chars = text.split('');
+      let line = '';
+      const lines = [];
+      for (let i = 0; i < chars.length; i++) {
+        const testLine = line + chars[i];
+        if (ctx.measureText(testLine).width > maxWidth && line.length > 0) {
+          lines.push(line);
+          line = chars[i];
+        } else {
+          line = testLine;
+        }
+      }
+      if (line) lines.push(line);
+      lines.forEach((line, i) => ctx.fillText(line, x, y + i * lineHeight));
     }
 
     function drawRoulette(innerRot = 0, outerRot = 0) {
@@ -100,14 +117,16 @@
         ctx.beginPath();
         ctx.moveTo(center, center);
         ctx.arc(center, center, center * 0.9, outerRot + i * topicAnglePer, outerRot + (i + 1) * topicAnglePer);
-        ctx.fillStyle = `hsl(${i * (360 / topics.length)}, 70%, 80%)`;
+        ctx.fillStyle = `hsl(${i * (360 / topics.length)}, 60%, 90%)`;
         ctx.fill();
         ctx.save();
         ctx.translate(center, center);
         ctx.rotate(outerRot + (i + 0.5) * topicAnglePer);
-        ctx.fillStyle = '#000';
-        ctx.font = `${center * 0.08}px sans-serif`;
-        ctx.fillText(topics[i], center * 0.5, 0);
+        ctx.fillStyle = '#333';
+        ctx.textAlign = "center";
+        ctx.textBaseline = "middle";
+        ctx.font = `${center * 0.05}px sans-serif`;
+        drawMultilineText(topics[i], center * 0.75, 0, center * 0.45, center * 0.055);
         ctx.restore();
       }
 
@@ -116,13 +135,15 @@
         ctx.beginPath();
         ctx.moveTo(center, center);
         ctx.arc(center, center, center * 0.5, innerRot + i * nameAnglePer, innerRot + (i + 1) * nameAnglePer);
-        ctx.fillStyle = `hsl(${(i * 360 / names.length + 180) % 360}, 60%, 85%)`;
+        ctx.fillStyle = `hsl(${(i * 360 / names.length + 180) % 360}, 40%, 85%)`;
         ctx.fill();
         ctx.save();
         ctx.translate(center, center);
         ctx.rotate(innerRot + (i + 0.5) * nameAnglePer);
-        ctx.fillStyle = '#000';
-        ctx.font = `${center * 0.1}px sans-serif`;
+        ctx.fillStyle = '#111';
+        ctx.font = `${center * 0.09}px sans-serif`;
+        ctx.textAlign = "center";
+        ctx.textBaseline = "middle";
         ctx.fillText(names[i], center * 0.3, 0);
         ctx.restore();
       }
@@ -141,19 +162,19 @@
       let speed2 = 0.25;
       let angle1 = innerAngle;
       let angle2 = outerAngle;
-      const nameIndex = 1; // 固定：佐藤
-      const topicIndex = 2; // 固定：最近のマイブーム
+      const nameIndex = 1;
+      const topicIndex = 2;
       const nameAnglePer = 2 * Math.PI / names.length;
       const topicAnglePer = 2 * Math.PI / topics.length;
-      const finalInner = (2 * Math.PI * 5) + (2 * Math.PI - (nameIndex + 0.5) * nameAnglePer);
+      const finalInner = -(2 * Math.PI * 5) - (2 * Math.PI - (nameIndex + 0.5) * nameAnglePer);
       const finalOuter = (2 * Math.PI * 4) + (2 * Math.PI - (topicIndex + 0.5) * topicAnglePer);
 
       const interval = setInterval(() => {
-        angle1 += speed1;
-        angle2 += speed2;
+        angle1 -= speed1; // 内側を反時計回り
+        angle2 += speed2; // 外側を時計回り
         speed1 *= 0.98;
         speed2 *= 0.98;
-        const done1 = speed1 < 0.01 && angle1 >= finalInner;
+        const done1 = speed1 < 0.01 && angle1 <= finalInner;
         const done2 = speed2 < 0.01 && angle2 >= finalOuter;
 
         if (done1 && done2) {
